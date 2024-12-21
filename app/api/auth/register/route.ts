@@ -1,35 +1,34 @@
-import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import prisma from "@/app/libs/prisma";
 import { createToken } from "@/app/utils/token";
+import { RegisterRequestBody, registerSchema } from "@/app/utils/zodSchema";
+import { handleApiRequest } from "@/app/utils/apiHelper";
+import { CustomError } from "@/app/utils/CustomError";
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const { name, email, password } = body;
+const registerLogic = async (parsedBody: RegisterRequestBody) => {
+  const { name, email, password } = parsedBody;
 
-  if (!name || !email || !password) return NextResponse.json({ message: "Please provide name, email and password" }, { status: 400 });
+  const existingUser = await prisma.user.findUnique({ where: { email } });
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (user) return NextResponse.json({ message: "Email already exists" }, { status: 400 });
+  if (existingUser) throw new CustomError("User already exists", 400, "USER_ALREADY_EXISTS");
 
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(password, salt);
-  try {
-    const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
-    });
-    const token = await createToken({ id: user.id, email: user.email! });
-    const response = NextResponse.json({
-      name: user.name,
-      email: user.email,
-      id: user.id,
-      token,
-    });
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    response.cookies.set("token", token);
+  const newUser = await prisma.user.create({
+    data: { name, email, password: hashedPassword },
+  });
 
-    return response;
-  } catch (e: any) {
-    return NextResponse.json({ message: "Something went wrong while creating user in db" }, { status: 400 });
-  }
+  const token = await createToken({ id: newUser.id, email: newUser.email! });
+  const response = {
+    name: newUser.name,
+    email: newUser.email,
+    id: newUser.id,
+    token,
+  };
+
+  return response;
+};
+
+export async function POST(req: Request, res: Response) {
+  return handleApiRequest(req, res, registerSchema, registerLogic);
 }
