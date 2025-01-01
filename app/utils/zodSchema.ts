@@ -18,7 +18,4 @@ export type LoginRequestBody = z.infer<typeof loginSchema>;
 export const createProjectSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
-  token: z.string(),
 });
-
-export type CreateProjectBody = z.infer<typeof createProjectSchema>;
