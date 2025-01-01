@@ -31,8 +31,9 @@ export async function GET(req: Request, res: Response) {
 
     const token = req.headers.get("authorization")?.split(" ")[1];
     const payload: TokenPayload = await decodeToken(token as string);
+
     let data;
-    if (projectId) data = await prisma.project.findUnique({ where: { id: projectId, ownerId: payload.id } });
+    if (projectId) data = await prisma.project.findUnique({ where: { id: projectId, ownerId: payload.id }, include: { tasks: { include: { creator: { select: { name: true } } } } } });
     else data = await prisma.project.findMany({ where: { ownerId: payload.id } });
 
     if (!data) throw new CustomError("Record not found", 404, "NOT_FOUND");
