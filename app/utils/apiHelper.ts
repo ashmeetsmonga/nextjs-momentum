@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { CustomError } from "./CustomError";
@@ -15,9 +14,10 @@ export const handleApiRequest = async (req: Request, res: Response, schema: z.Zo
     const response = NextResponse.json(result);
     return response;
   } catch (error) {
+    console.log("Ashmeet error", error);
     if (error instanceof z.ZodError) {
       const formattedErrors = error.errors.map((err) => ({
-        field: err.path.join("."), // Create a dot-separated string for nested fields
+        field: err.path.join("."),
         message: err.message,
       }));
       return NextResponse.json({ error: "Validation failed", details: formattedErrors }, { status: 400 });
