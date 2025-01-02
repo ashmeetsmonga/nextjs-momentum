@@ -19,3 +19,22 @@ export async function POST(req: Request, res: Response) {
     return errorHandler(error);
   }
 }
+
+export async function GET(req: Request, res: Response) {
+  try {
+    const url = new URL(req.url);
+    const searchParams = new URLSearchParams(url.searchParams);
+    const taskId = searchParams.get("taskId");
+
+    if (!taskId) return NextResponse.json({ message: "Task not found" }, { status: 404 });
+
+    const token = req.headers.get("authorization")?.split(" ")[1];
+    const payload: TokenPayload = await decodeToken(token as string);
+
+    const task = await prisma.task.findUnique({ where: { id: taskId, creatorId: payload.id } });
+
+    return NextResponse.json(task, { status: 200 });
+  } catch (error) {
+    return errorHandler(error);
+  }
+}
