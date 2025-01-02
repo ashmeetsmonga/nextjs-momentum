@@ -1,3 +1,4 @@
+import Card from "@/app/components/Card/Card";
 import { LayoutList, ListChecks, Pickaxe, SquareChartGantt } from "lucide-react";
 import React from "react";
 
@@ -38,6 +39,20 @@ const ProjectPage = () => {
             <ListChecks />
             Done
           </p>
+        </div>
+        <div className="grid grid-cols-4 gap-4 mt-5">
+          <div>
+            <Card type="TODO" />
+          </div>
+          <div>
+            <Card type="IN_PROGRESS" />
+          </div>
+          <div>
+            <Card type="REVIEW" />
+          </div>
+          <div>
+            <Card type="DONE" />
+          </div>
         </div>
       </div>
     </div>
