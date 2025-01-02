@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Lexend } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import "./globals.css";
+import Sidebar from "./components/Sidebar/Sidebar";
 
-const lexend = Lexend({ subsets: ["latin"] });
+const inter = Inter_Tight({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Momentum",
@@ -16,7 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lexend.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased flex`}>
+        <div className="w-[300px]">
+          <Sidebar />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
