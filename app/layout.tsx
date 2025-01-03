@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter_Tight } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./components/Sidebar/Sidebar";
+import ToasterProvider from "./providers/ToasterProvider";
 
 const inter = Inter_Tight({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased flex`}>
+        <ToasterProvider />
         <div className="w-[300px]">
           <Sidebar />
         </div>

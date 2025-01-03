@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
 import { FC, useState } from "react";
+import toast from "react-hot-toast";
 
 interface EditProjectDialogProps {
   name: string;
@@ -21,12 +22,16 @@ const EditProjectDialog: FC<EditProjectDialogProps> = ({ name, description, proj
   const [open, setOpen] = useState(false);
 
   const handleSave = () => {
+    const toastId = toast.loading("Updating project details");
     updateProjectDetails(inputName, inputDescription, projectId)
       .then((data) => {
         setOpen(false);
         clearCachesByServerAction("/project/[projectId]", "page");
+        toast.dismiss(toastId);
       })
-      .catch();
+      .catch((e) => {
+        toast.error("Unable to update project details", { id: toastId });
+      });
   };
 
   return (
