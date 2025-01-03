@@ -8,3 +8,13 @@ export const getProjectDetails = async (projectId: string) => {
   });
   return data;
 };
+
+export const updateProjectDetails = async (name: string, description: string, projectId: string) => {
+  const { data } = await axios.put("/api/auth/project", {
+    name,
+    description,
+    projectId,
+  });
+
+  return data;
+};

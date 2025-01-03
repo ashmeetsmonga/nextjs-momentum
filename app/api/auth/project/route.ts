@@ -1,6 +1,6 @@
 import prisma from "@/app/libs/prisma";
 import { decodeToken } from "@/app/utils/token";
-import { createProjectSchema } from "@/app/utils/zodSchema";
+import { createProjectSchema, editProjectSchema } from "@/app/utils/zodSchema";
 import { NextResponse } from "next/server";
 import { errorHandler } from "@/app/utils/errorHandler";
 import { CustomError } from "@/app/utils/CustomError";
@@ -44,5 +44,18 @@ export async function GET(req: Request, res: Response) {
     return NextResponse.json(data);
   } catch (error) {
     return errorHandler(error);
+  }
+}
+
+export async function PUT(req: Request, res: Response) {
+  try {
+    const body = await req.json();
+    const parsedBody = editProjectSchema.parse(body);
+    const { name, description, projectId } = parsedBody;
+
+    const project = await prisma.project.update({ where: { id: projectId }, data: { name, description } });
+    return NextResponse.json({ message: "Project updated successfully" });
+  } catch (error) {
+    errorHandler(error);
   }
 }

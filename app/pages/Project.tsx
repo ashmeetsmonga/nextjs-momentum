@@ -13,7 +13,7 @@ const Project: FC<ProjectProps> = ({ project }) => {
       <div className="w-full">
         <div className="flex gap-5 items-center">
           <h1 className="text-5xl font-bold">{project.name}</h1>
-          <EditProjectDialog name={project.name} description={project.description} />
+          <EditProjectDialog name={project.name} description={project.description} projectId={project.id} />
         </div>
         <p className="text-gray-500 text-sm mt-2">{project.description}</p>
         <div className="w-[300px] mt-5 space-y-2 text-sm">

@@ -1,7 +1,9 @@
 "use client";
 
+import { updateProjectDetails } from "@/app/utils/apiHandlers";
+import clearCachesByServerAction from "@/app/utils/serverActions";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
@@ -10,18 +12,25 @@ import { FC, useState } from "react";
 interface EditProjectDialogProps {
   name: string;
   description: string;
+  projectId: string;
 }
 
-const EditProjectDialog: FC<EditProjectDialogProps> = ({ name, description }) => {
+const EditProjectDialog: FC<EditProjectDialogProps> = ({ name, description, projectId }) => {
   const [inputName, setInputName] = useState(name);
   const [inputDescription, setInputDescription] = useState(description);
+  const [open, setOpen] = useState(false);
 
   const handleSave = () => {
-    console.log(inputName, inputDescription);
+    updateProjectDetails(inputName, inputDescription, projectId)
+      .then((data) => {
+        setOpen(false);
+        clearCachesByServerAction("/project/[projectId]", "page");
+      })
+      .catch();
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="text-gray-500 cursor-pointer">
           <Pencil />
