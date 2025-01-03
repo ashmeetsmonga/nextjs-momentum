@@ -10,10 +10,10 @@ export async function POST(req: Request, res: Response) {
     const parsedBody = createTaskSchema.parse(body);
     const { title, description, projectId } = parsedBody;
 
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    const payload: TokenPayload = await decodeToken(token as string);
+    // const token = req.headers.get("authorization")?.split(" ")[1];
+    // const payload: TokenPayload = await decodeToken(token as string);
 
-    const task = await prisma.task.create({ data: { title, description, projectId, creatorId: payload.id } });
+    const task = await prisma.task.create({ data: { title, description, projectId, creatorId: "67756d4ef0e0eded7ddb2171" } });
     return NextResponse.json({ message: "Task created successfully", taskId: task.id }, { status: 201 });
   } catch (error) {
     return errorHandler(error);
@@ -28,10 +28,10 @@ export async function GET(req: Request, res: Response) {
 
     if (!taskId) return NextResponse.json({ message: "Task not found" }, { status: 404 });
 
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    const payload: TokenPayload = await decodeToken(token as string);
+    // const token = req.headers.get("authorization")?.split(" ")[1];
+    // const payload: TokenPayload = await decodeToken(token as string);
 
-    const task = await prisma.task.findUnique({ where: { id: taskId, creatorId: payload.id } });
+    const task = await prisma.task.findUnique({ where: { id: taskId, creatorId: "67756d4ef0e0eded7ddb2171" } });
 
     return NextResponse.json(task, { status: 200 });
   } catch (error) {
