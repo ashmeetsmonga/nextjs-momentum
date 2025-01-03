@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}"],
-  safelist: ["border-gray-100", "border-blue-100", "border-orange-100", "border-green-100"],
+  safelist: ["border-gray-200", "border-blue-100", "border-orange-100", "border-green-100"],
   theme: {
     extend: {
       colors: {
