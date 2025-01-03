@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import { LayoutList, ListChecks, Pickaxe, SquareChartGantt } from "lucide-react";
+import { LayoutList, ListChecks, Pencil, Pickaxe, SquareChartGantt } from "lucide-react";
 import Card from "../components/Card/Card";
+import EditProjectDialog from "../components/EditProjectDialog/EditProjectDialog";
 
 interface ProjectProps {
   project: Project;
@@ -10,7 +11,10 @@ const Project: FC<ProjectProps> = ({ project }) => {
   return (
     <div className="w-full p-10 pt-16 flex flex-col gap-10">
       <div className="w-full">
-        <h1 className="text-5xl font-bold">{project.name}</h1>
+        <div className="flex gap-5 items-center">
+          <h1 className="text-5xl font-bold">{project.name}</h1>
+          <EditProjectDialog name={project.name} description={project.description} />
+        </div>
         <p className="text-gray-500 text-sm mt-2">{project.description}</p>
         <div className="w-[300px] mt-5 space-y-2 text-sm">
           <div className="flex gap-10 items-center justify-between">
