@@ -27,7 +27,7 @@ export const editProjectSchema = z.object({
   projectId: z.string().min(1, "ProjectId is required"),
 });
 
-export const TaskStatusSchema = z.enum([TaskStatus.TODO, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.BLOCKED]);
+export const TaskStatusSchema = z.enum([TaskStatus.TODO, TaskStatus.IN_PROGRESS, TaskStatus.REVIEW, TaskStatus.DONE]);
 export const PriorityStatusSchema = z.enum([TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.CRITICAL]);
 
 export const createTaskSchema = z.object({

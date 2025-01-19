@@ -30,6 +30,8 @@ const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
     addTask(data.title.toString(), data.description.toString(), projectId, data.status.toString(), data.priority.toString())
       .then((data) => {
         toast.success("Task created successfully", { id: toastId });
+        clearCachesByServerAction("/project/[projectId]", "page");
+        setOpen(false);
       })
       .catch((e) => toast.error("Something went wrong, please try after some time", { id: toastId }));
   };
