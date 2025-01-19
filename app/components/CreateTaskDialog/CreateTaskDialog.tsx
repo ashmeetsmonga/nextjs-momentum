@@ -26,8 +26,14 @@ const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    const formObj = Object.fromEntries(Object.entries(data).map(([key, value]) => [key, value instanceof File ? value.name : String(value)]));
+
+    if (!formObj.title || !formObj.description || !formObj.status || !formObj.priority) {
+      return toast.error("Please specify all fields");
+    }
+
     const toastId = toast.loading("Adding task");
-    addTask(data.title.toString(), data.description.toString(), projectId, data.status.toString(), data.priority.toString())
+    addTask(formObj.title, formObj.description, projectId, formObj.status, formObj.priority)
       .then((data) => {
         toast.success("Task created successfully", { id: toastId });
         clearCachesByServerAction("/project/[projectId]", "page");
@@ -50,7 +56,7 @@ const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
         <form onSubmit={handleSave}>
           <div className="w-full space-y-4 mt-4">
             <div>
-              <input name="title" className="text-2xl font-semibold w-full border-none outline-none focus:outline-none" placeholder="Task Title" />
+              <input name="title" className="text-2xl font-semibold w-full border-none outline-none focus:outline-none" placeholder="Task Title..." />
             </div>
             <div className="flex gap-4">
               <div>
