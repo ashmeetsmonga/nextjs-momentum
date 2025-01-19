@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { LayoutList, ListChecks, Pencil, Pickaxe, SquareChartGantt } from "lucide-react";
 import Card from "../components/Card/Card";
 import EditProjectDialog from "../components/EditProjectDialog/EditProjectDialog";
+import CreateTaskDialog from "../components/CreateTaskDialog/CreateTaskDialog";
 
 interface ProjectProps {
   project: Project;
@@ -29,53 +30,58 @@ const Project: FC<ProjectProps> = ({ project }) => {
       </div>
 
       {/* Board */}
-      <div className="w-full flex-grow bg-gray-100 rounded-lg p-5">
-        <div className="px-4 py-2 bg-white rounded-lg flex justify-around font-semibold">
-          <p className="text-gray-500 flex gap-2">
-            <LayoutList />
-            Todo
-          </p>
-          <p className="text-blue-500 flex gap-2">
-            <Pickaxe />
-            In Progress
-          </p>
-          <p className="text-orange-500 flex gap-2">
-            <SquareChartGantt />
-            Review
-          </p>
-          <p className="text-green-500 flex gap-2">
-            <ListChecks />
-            Done
-          </p>
+      <div>
+        <div className="w-full flex justify-end">
+          <CreateTaskDialog projectId={project.id} />
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-5">
-          <div className="space-y-2">
-            {project.tasks
-              .filter((task) => task.status === "TODO")
-              .map((task, id: number) => (
-                <Card key={id} task={task} />
-              ))}
+        <div className="w-full flex-grow bg-gray-100 rounded-lg p-5 mt-3">
+          <div className="px-4 py-2 bg-white rounded-lg flex justify-around font-semibold">
+            <p className="text-gray-500 flex gap-2">
+              <LayoutList />
+              Todo
+            </p>
+            <p className="text-blue-500 flex gap-2">
+              <Pickaxe />
+              In Progress
+            </p>
+            <p className="text-orange-500 flex gap-2">
+              <SquareChartGantt />
+              Review
+            </p>
+            <p className="text-green-500 flex gap-2">
+              <ListChecks />
+              Done
+            </p>
           </div>
-          <div className="space-y-2">
-            {project.tasks
-              .filter((task) => task.status === "IN_PROGRESS")
-              .map((task, id: number) => (
-                <Card key={id} task={task} />
-              ))}
-          </div>
-          <div className="space-y-2">
-            {project.tasks
-              .filter((task) => task.status === "REVIEW")
-              .map((task, id: number) => (
-                <Card key={id} task={task} />
-              ))}
-          </div>
-          <div className="space-y-2">
-            {project.tasks
-              .filter((task) => task.status === "DONE")
-              .map((task, id: number) => (
-                <Card key={id} task={task} />
-              ))}
+          <div className="grid grid-cols-4 gap-4 mt-5">
+            <div className="space-y-2">
+              {project.tasks
+                .filter((task) => task.status === "TODO")
+                .map((task, id: number) => (
+                  <Card key={id} task={task} />
+                ))}
+            </div>
+            <div className="space-y-2">
+              {project.tasks
+                .filter((task) => task.status === "IN_PROGRESS")
+                .map((task, id: number) => (
+                  <Card key={id} task={task} />
+                ))}
+            </div>
+            <div className="space-y-2">
+              {project.tasks
+                .filter((task) => task.status === "REVIEW")
+                .map((task, id: number) => (
+                  <Card key={id} task={task} />
+                ))}
+            </div>
+            <div className="space-y-2">
+              {project.tasks
+                .filter((task) => task.status === "DONE")
+                .map((task, id: number) => (
+                  <Card key={id} task={task} />
+                ))}
+            </div>
           </div>
         </div>
       </div>
