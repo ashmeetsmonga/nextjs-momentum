@@ -1,6 +1,6 @@
 "use client";
 
-import { updateProjectDetails } from "@/app/utils/apiHandlers";
+import { addTask, updateProjectDetails } from "@/app/utils/apiHandlers";
 import clearCachesByServerAction from "@/app/utils/serverActions";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -10,8 +10,9 @@ import { Pencil } from "lucide-react";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DatePicker } from "../DatePicker/DatePicker";
 import { Textarea } from "@/components/ui/textarea";
+import DatePicker from "../DatePicker/DatePicker";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 interface CreateTaskDialogProps {
   projectId: string;
@@ -19,8 +20,19 @@ interface CreateTaskDialogProps {
 
 const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date>();
 
-  const handleSave = () => {};
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const toastId = toast.loading("Adding task");
+    addTask(data.title.toString(), data.description.toString(), projectId, data.status.toString(), data.priority.toString())
+      .then((data) => {
+        toast.success("Task created successfully", { id: toastId });
+      })
+      .catch((e) => toast.error("Something went wrong, please try after some time", { id: toastId }));
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,50 +45,52 @@ const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
         <DialogHeader className="w-[700px] ">
           <DialogTitle>Add a new task</DialogTitle>
         </DialogHeader>
-        <div className="w-full space-y-4 mt-4">
-          <div>
-            <input id="title" className="text-2xl font-semibold w-full border-none outline-none focus:outline-none" placeholder="Task Title" />
-          </div>
-          <div className="flex gap-4">
+        <form onSubmit={handleSave}>
+          <div className="w-full space-y-4 mt-4">
             <div>
-              <Select>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent className="">
-                  <SelectItem value="todo">Todo</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="review">Review</SelectItem>
-                  <SelectItem value="done">Done</SelectItem>
-                </SelectContent>
-              </Select>
+              <input name="title" className="text-2xl font-semibold w-full border-none outline-none focus:outline-none" placeholder="Task Title" />
+            </div>
+            <div className="flex gap-4">
+              <div>
+                <Select name="status">
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent className="">
+                    {Object.values(TaskStatus).map((status, idx) => (
+                      <SelectItem key={idx} value={status} className="capitalize">
+                        {status.replace("_", " ").toLocaleLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Select name="priority">
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue className="capitalize" placeholder="Priority" />
+                  </SelectTrigger>
+                  <SelectContent className="capitalize">
+                    {Object.values(TaskPriority).map((status, idx) => (
+                      <SelectItem key={idx} value={status} className="capitalize">
+                        {status.replace("_", " ").toLocaleLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <DatePicker date={date} setDate={setDate} />
+              </div>
             </div>
             <div>
-              <Select>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent className="">
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <DatePicker />
+              <Textarea name="description" placeholder="Description" rows={5} />
             </div>
           </div>
-          <div>
-            <Textarea placeholder="Description" rows={5} />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button onClick={handleSave} type="submit">
-            Save
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="mt-4">
+            <Button type="submit">Save</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

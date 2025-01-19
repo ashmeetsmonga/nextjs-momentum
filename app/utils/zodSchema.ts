@@ -1,3 +1,4 @@
+import { TaskPriority, TaskStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const registerSchema = z.object({
@@ -26,8 +27,13 @@ export const editProjectSchema = z.object({
   projectId: z.string().min(1, "ProjectId is required"),
 });
 
+export const TaskStatusSchema = z.enum([TaskStatus.TODO, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.BLOCKED]);
+export const PriorityStatusSchema = z.enum([TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.CRITICAL]);
+
 export const createTaskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   projectId: z.string(),
+  status: TaskStatusSchema,
+  priority: PriorityStatusSchema,
 });

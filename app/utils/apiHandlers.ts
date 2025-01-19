@@ -18,3 +18,8 @@ export const updateProjectDetails = async (name: string, description: string, pr
 
   return data;
 };
+
+export const addTask = async (title: string, description: string, projectId: string, status: string, priority: string) => {
+  const { data } = await axios.post("/api/auth/task", { title, description, projectId, status, priority });
+  return data;
+};

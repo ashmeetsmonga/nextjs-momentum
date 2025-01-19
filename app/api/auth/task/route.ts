@@ -8,12 +8,12 @@ export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
     const parsedBody = createTaskSchema.parse(body);
-    const { title, description, projectId } = parsedBody;
+    const { title, description, projectId, status, priority } = parsedBody;
 
     // const token = req.headers.get("authorization")?.split(" ")[1];
     // const payload: TokenPayload = await decodeToken(token as string);
 
-    const task = await prisma.task.create({ data: { title, description, projectId, creatorId: "67756d4ef0e0eded7ddb2171" } });
+    const task = await prisma.task.create({ data: { title, description, projectId, status, priority, creatorId: "67756d4ef0e0eded7ddb2171", assigneeId: "67756d4ef0e0eded7ddb2171" } });
     return NextResponse.json({ message: "Task created successfully", taskId: task.id }, { status: 201 });
   } catch (error) {
     return errorHandler(error);
