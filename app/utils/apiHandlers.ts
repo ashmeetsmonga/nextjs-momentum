@@ -5,8 +5,16 @@ export const getProjects = async () => {
   return data;
 };
 
+export const addProject = async (name: string, description: string) => {
+  const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/project`, {
+    name,
+    description,
+  });
+  return data;
+};
+
 export const deleteProject = async (projectId: string) => {
-  const { data } = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/projects`, {
+  const { data } = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/project`, {
     params: {
       projectId,
     },

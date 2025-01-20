@@ -1,7 +1,8 @@
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { FC } from "react";
 import DeleteProjectAlert from "../DeleteProjectAlert";
+import CreateProjectDialog from "../CreateProjectDialog";
 
 interface ProjectsPageProps {
   projects: Project[];
@@ -10,8 +11,9 @@ interface ProjectsPageProps {
 const ProjectsPage: FC<ProjectsPageProps> = ({ projects }) => {
   return (
     <div className="w-full p-10 pt-16 flex flex-col gap-10">
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-4 items-center">
         <h1 className="text-5xl font-bold">Projects</h1>
+        <CreateProjectDialog />
       </div>
       <div className="space-y-5">
         {projects.map((project) => (
