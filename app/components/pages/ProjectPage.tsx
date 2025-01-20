@@ -1,14 +1,14 @@
 import React, { FC } from "react";
 import { LayoutList, ListChecks, Pencil, Pickaxe, SquareChartGantt } from "lucide-react";
-import Card from "../components/Card/Card";
-import EditProjectDialog from "../components/EditProjectDialog/EditProjectDialog";
-import CreateTaskDialog from "../components/CreateTaskDialog/CreateTaskDialog";
+import Card from "../Card/Card";
+import EditProjectDialog from "../EditProjectDialog/EditProjectDialog";
+import CreateTaskDialog from "../CreateTaskDialog/CreateTaskDialog";
 
-interface ProjectProps {
+interface ProjectPageProps {
   project: Project;
 }
 
-const Project: FC<ProjectProps> = ({ project }) => {
+const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
   return (
     <div className="w-full p-10 pt-16 flex flex-col gap-10">
       <div className="w-full">
@@ -89,4 +89,4 @@ const Project: FC<ProjectProps> = ({ project }) => {
   );
 };
 
-export default Project;
+export default ProjectPage;
