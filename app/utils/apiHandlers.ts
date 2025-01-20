@@ -5,6 +5,15 @@ export const getProjects = async () => {
   return data;
 };
 
+export const deleteProject = async (projectId: string) => {
+  const { data } = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/projects`, {
+    params: {
+      projectId,
+    },
+  });
+  return data;
+};
+
 export const getProjectDetails = async (projectId: string) => {
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/project`, {
     params: {
