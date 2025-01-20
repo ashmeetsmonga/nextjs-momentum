@@ -23,6 +23,7 @@ const CreateTaskDialog: FC<CreateTaskDialogProps> = ({ projectId }) => {
   const [date, setDate] = useState<Date>();
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("Ashmeet projectId", projectId);
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());

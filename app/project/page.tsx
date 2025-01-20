@@ -1,8 +1,10 @@
 import React from "react";
-import ProjectsPage from "../components/pages/ProjectsPage";
+import ProjectsPage from "@/app/components/pages/ProjectsPage";
+import { getProjects } from "@/app/utils/apiHandlers";
 
-const page = () => {
-  return <ProjectsPage />;
+const page = async () => {
+  const data = await getProjects();
+  return <ProjectsPage projects={data} />;
 };
 
 export default page;

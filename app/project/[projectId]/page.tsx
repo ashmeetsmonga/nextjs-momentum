@@ -5,7 +5,6 @@ import React from "react";
 const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   const projectId = (await params).projectId;
   const data = await getProjectDetails(projectId);
-  console.log(data);
 
   return <ProjectPage project={data} />;
 };

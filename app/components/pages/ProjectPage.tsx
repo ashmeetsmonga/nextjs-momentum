@@ -30,7 +30,7 @@ const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
       </div>
 
       {/* Board */}
-      <div>
+      <div className="flex-grow flex flex-col">
         <div className="w-full flex justify-end">
           <CreateTaskDialog projectId={project.id} />
         </div>
