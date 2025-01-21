@@ -37,3 +37,9 @@ export const createTaskSchema = z.object({
   status: TaskStatusSchema,
   priority: PriorityStatusSchema,
 });
+
+export const updateTaskSchema = createTaskSchema
+  .extend({
+    taskId: z.string(),
+  })
+  .omit({ projectId: true });

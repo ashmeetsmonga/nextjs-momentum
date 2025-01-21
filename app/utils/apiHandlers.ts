@@ -45,3 +45,8 @@ export const addTask = async (title: string, description: string, projectId: str
   const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/task`, { title, description, projectId, status, priority });
   return data;
 };
+
+export const updateTask = async (taskId: string, title: string, description: string, status: string, priority: string) => {
+  const { data } = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/task`, { taskId, title, description, status, priority });
+  return data;
+};

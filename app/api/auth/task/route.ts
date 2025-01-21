@@ -1,7 +1,7 @@
 import prisma from "@/app/libs/prisma";
 import { errorHandler } from "@/app/utils/errorHandler";
 import { decodeToken } from "@/app/utils/token";
-import { createTaskSchema } from "@/app/utils/zodSchema";
+import { createTaskSchema, updateTaskSchema } from "@/app/utils/zodSchema";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request, res: Response) {
@@ -34,6 +34,19 @@ export async function GET(req: Request, res: Response) {
     const task = await prisma.task.findUnique({ where: { id: taskId, creatorId: "67756d4ef0e0eded7ddb2171" } });
 
     return NextResponse.json(task, { status: 200 });
+  } catch (error) {
+    return errorHandler(error);
+  }
+}
+
+export async function PUT(req: Request, res: Response) {
+  try {
+    const body = await req.json();
+    const parsedBody = updateTaskSchema.parse(body);
+    const task = parsedBody;
+    const updatedTask = await prisma.task.update({ where: { id: task.taskId }, data: (({ taskId, ...updatedFields }) => updatedFields)(task) });
+
+    return NextResponse.json({ message: "Task updated successfully" });
   } catch (error) {
     return errorHandler(error);
   }

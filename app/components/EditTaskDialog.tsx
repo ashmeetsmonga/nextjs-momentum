@@ -1,10 +1,10 @@
 "use client";
 
-import { addTask, updateProjectDetails } from "@/app/utils/apiHandlers";
+import { addTask, updateTask } from "@/app/utils/apiHandlers";
 import clearCachesByServerAction from "@/app/utils/serverActions";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +21,7 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({ open, setOpen, task }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [priority, setPriority] = useState("");
   const [date, setDate] = useState<Date>();
 
   useEffect(() => {
@@ -28,29 +29,28 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({ open, setOpen, task }) => {
       setTitle(task.title);
       setDescription(task.description);
       setStatus(task.status);
+      setPriority(task.priority);
     }
   }, [task]);
 
-  // const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-  //   console.log("Ashmeet projectId", projectId);
-  //   e.preventDefault();
-  //   const formData = new FormData(e.currentTarget);
-  //   const data = Object.fromEntries(formData.entries());
-  //   const formObj = Object.fromEntries(Object.entries(data).map(([key, value]) => [key, value instanceof File ? value.name : String(value)]));
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!task) return;
+    e.preventDefault();
 
-  //   if (!formObj.title || !formObj.description || !formObj.status || !formObj.priority) {
-  //     return toast.error("Please specify all fields");
-  //   }
+    if (!title || !description || !status || !priority) {
+      return toast.error("Please specify all fields");
+    }
 
-  //   const toastId = toast.loading("Adding task");
-  //   addTask(formObj.title, formObj.description, projectId, formObj.status, formObj.priority)
-  //     .then((data) => {
-  //       toast.success("Task created successfully", { id: toastId });
-  //       clearCachesByServerAction("/project/[projectId]", "page");
-  //       setOpen(false);
-  //     })
-  //     .catch((e) => toast.error("Something went wrong, please try after some time", { id: toastId }));
-  // };
+    const toastId = toast.loading("Updating task");
+
+    updateTask(task.id, title, description, status, priority)
+      .then((data) => {
+        toast.success(data.message, { id: toastId });
+        clearCachesByServerAction("/project/[projectId]", "page");
+        setOpen(false);
+      })
+      .catch((e) => toast.error("Something went wrong, please try after some time", { id: toastId }));
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,7 +58,7 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({ open, setOpen, task }) => {
         <DialogHeader className="w-[700px] ">
           <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
-        <form onSubmit={() => {}}>
+        <form onSubmit={handleSave}>
           <div className="w-full space-y-4 mt-4">
             <div>
               <input
@@ -85,7 +85,7 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({ open, setOpen, task }) => {
                 </Select>
               </div>
               <div>
-                <Select name="priority">
+                <Select name="priority" value={priority} onValueChange={(value) => setPriority(value)}>
                   <SelectTrigger className="w-[150px]">
                     <SelectValue className="capitalize" placeholder="Priority" />
                   </SelectTrigger>
