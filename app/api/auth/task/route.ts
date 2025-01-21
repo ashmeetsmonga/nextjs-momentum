@@ -51,3 +51,17 @@ export async function PUT(req: Request, res: Response) {
     return errorHandler(error);
   }
 }
+
+export async function DELETE(req: Request, res: Response) {
+  try {
+    const url = new URL(req.url);
+    const searchParams = new URLSearchParams(url.searchParams);
+    const taskId = searchParams.get("taskId");
+
+    if (!taskId) throw "Invalid Task ID";
+    const deletedTask = await prisma.task.delete({ where: { id: taskId } });
+    return NextResponse.json({ message: "Project deleted successfully" });
+  } catch (error) {
+    return errorHandler(error);
+  }
+}
