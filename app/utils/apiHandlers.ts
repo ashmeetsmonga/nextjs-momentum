@@ -50,3 +50,12 @@ export const updateTask = async (taskId: string, title: string, description: str
   const { data } = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/task`, { taskId, title, description, status, priority });
   return data;
 };
+
+export const deleteTask = async (taskId: string) => {
+  const { data } = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/task`, {
+    params: {
+      taskId,
+    },
+  });
+  return data;
+};

@@ -5,6 +5,7 @@ import Card from "../Card/Card";
 import EditProjectDialog from "../EditProjectDialog/EditProjectDialog";
 import CreateTaskDialog from "../CreateTaskDialog/CreateTaskDialog";
 import EditTaskDialog from "../EditTaskDialog";
+import DeleteTaskAlert from "../DeleteTaskAlert";
 
 interface ProjectPageProps {
   project: Project;
@@ -13,10 +14,17 @@ interface ProjectPageProps {
 const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
   const [openEditTaskDialog, setOpenEditTaskDialog] = useState(false);
   const [selectedEditTask, setSelectedEditTask] = useState<Task | null>(null);
+  const [openDeleteTaskAlert, setOpenDeleteTaskAlert] = useState(false);
+  const [selectedDeleteTask, setSelectedDeleteTask] = useState<string>("");
 
   const handleOpenEditTaskDialog = (task: Task) => {
     setOpenEditTaskDialog(true);
     setSelectedEditTask(task);
+  };
+
+  const handleOpenDeleteTaskAlert = (taskId: string) => {
+    setOpenDeleteTaskAlert(true);
+    setSelectedDeleteTask(taskId);
   };
 
   return (
@@ -68,34 +76,35 @@ const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
               {project.tasks
                 .filter((task) => task.status === "TODO")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} openDeleteTaskAlert={handleOpenDeleteTaskAlert} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "IN_PROGRESS")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} openDeleteTaskAlert={handleOpenDeleteTaskAlert} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "REVIEW")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} openDeleteTaskAlert={handleOpenDeleteTaskAlert} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "DONE")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} openDeleteTaskAlert={handleOpenDeleteTaskAlert} />
                 ))}
             </div>
           </div>
         </div>
       </div>
       <EditTaskDialog open={openEditTaskDialog} setOpen={setOpenEditTaskDialog} task={selectedEditTask} />
+      <DeleteTaskAlert open={openDeleteTaskAlert} setOpen={setOpenDeleteTaskAlert} taskId={selectedDeleteTask} />
     </div>
   );
 };
