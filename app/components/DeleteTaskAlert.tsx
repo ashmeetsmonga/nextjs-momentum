@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FC } from "react";
 import toast from "react-hot-toast";
-import { deleteProject } from "../utils/apiHandlers";
+import { deleteTask } from "../utils/apiHandlers";
 import clearCachesByServerAction from "../utils/serverActions";
 
 interface DeleteTaskAlertProps {
@@ -25,10 +25,11 @@ interface DeleteTaskAlertProps {
 const DeleteTaskAlert: FC<DeleteTaskAlertProps> = ({ taskId, open, setOpen }) => {
   const handleDelete = () => {
     const toastId = toast.loading("Deleting task");
-    deleteProject(taskId)
+    deleteTask(taskId)
       .then((data) => {
         clearCachesByServerAction("/project/[projectId]", "page");
         toast.success(data.message, { id: toastId });
+        setOpen(false);
       })
       .catch((error) => {
         toast.error("Something went wrong", { id: toastId });
