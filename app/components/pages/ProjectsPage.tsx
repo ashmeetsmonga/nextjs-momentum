@@ -1,4 +1,3 @@
-import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { FC } from "react";
 import DeleteProjectAlert from "../DeleteProjectAlert";

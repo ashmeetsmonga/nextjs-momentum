@@ -1,14 +1,24 @@
-import React, { FC } from "react";
+"use client";
+import React, { FC, useState } from "react";
 import { LayoutList, ListChecks, Pencil, Pickaxe, SquareChartGantt } from "lucide-react";
 import Card from "../Card/Card";
 import EditProjectDialog from "../EditProjectDialog/EditProjectDialog";
 import CreateTaskDialog from "../CreateTaskDialog/CreateTaskDialog";
+import EditTaskDialog from "../EditTaskDialog";
 
 interface ProjectPageProps {
   project: Project;
 }
 
 const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
+  const [openEditTaskDialog, setOpenEditTaskDialog] = useState(false);
+  const [selectedEditTask, setSelectedEditTask] = useState<Task | null>(null);
+
+  const handleOpenEditTaskDialog = (task: Task) => {
+    setOpenEditTaskDialog(true);
+    setSelectedEditTask(task);
+  };
+
   return (
     <div className="w-full p-10 pt-16 flex flex-col gap-10">
       <div className="w-full">
@@ -58,33 +68,34 @@ const ProjectPage: FC<ProjectPageProps> = ({ project }) => {
               {project.tasks
                 .filter((task) => task.status === "TODO")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "IN_PROGRESS")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "REVIEW")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
                 ))}
             </div>
             <div className="space-y-2">
               {project.tasks
                 .filter((task) => task.status === "DONE")
                 .map((task, id: number) => (
-                  <Card key={id} task={task} />
+                  <Card key={id} task={task} openEditTaskDialog={handleOpenEditTaskDialog} />
                 ))}
             </div>
           </div>
         </div>
       </div>
+      <EditTaskDialog open={openEditTaskDialog} setOpen={setOpenEditTaskDialog} task={selectedEditTask} />
     </div>
   );
 };
